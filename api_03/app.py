@@ -37,7 +37,7 @@ def index():
             trace_id=request.headers['X-B3-TraceID'],
             span_id=request.headers['X-B3-SpanID'],
             parent_span_id=request.headers['X-B3-ParentSpanID'],
-            flags=0,
+            flags=request.headers['X-B3-Flags'],
             is_sampled=request.headers['X-B3-Sampled'],
         ),
         span_name='index_api_03',

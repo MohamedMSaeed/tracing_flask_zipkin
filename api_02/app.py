@@ -44,7 +44,7 @@ def index():
         span_name='index_api_02',
         transport_handler=default_handler,
         port=5000,
-        sample_rate=1,
+        sample_rate=100,
     ):
         call_api_03()
     return 'OK', 200

@@ -1,0 +1,40 @@
+version: "3.4"
+
+services:
+  zipkin:
+    image: openzipkin/zipkin:latest
+    container_name: zipkin
+    ports:
+      - "9411:9411"
+
+
+  api_01:
+    build:
+      context: api_01
+    container_name: api_01
+    ports:
+      - "5001:5000"
+    environment:
+      - 'ZIPKIN_DSN=http://zipkin:9411/api/v1/spans'
+    volumes:
+      - './api_01:/app'
+
+
+  api_02:
+    build:
+      context: api_02
+    container_name: api_02
+    environment:
+      - 'ZIPKIN_DSN=http://zipkin:9411/api/v1/spans'
+    volumes:
+      - './api_02:/app'
+
+
+  api_03:
+    build:
+      context: api_03
+    container_name: api_03
+    environment:
+      - 'ZIPKIN_DSN=http://zipkin:9411/api/v1/spans'
+    volumes:
+      - './api_03:/app'

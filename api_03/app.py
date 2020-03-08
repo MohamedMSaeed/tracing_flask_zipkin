@@ -11,8 +11,6 @@ app = Flask(__name__)
 def default_handler(encoded_span):
     body = encoded_span
 
-    app.logger.debug("body %s", body)
-
     # return requests.post(
     #     "http://zipkin:9411/api/v1/spans",
     #     data=body,
@@ -32,8 +30,8 @@ def log_request_info():
     app.logger.debug('Body: %s', request.get_data())
 
 
-@zipkin_span(service_name='api_03', span_name='do_stuff_api_03')
-def do_stuff():
+@zipkin_span(service_name='api_03', span_name='sleep_api_03')
+def sleep():
     time.sleep(2)
     return 'OK'
 
@@ -56,7 +54,7 @@ def index():
         kind=Kind.CLIENT,
         encoding=Encoding.V2_JSON
     ):
-        do_stuff()
+        sleep()
     return 'OK', 200
 
 

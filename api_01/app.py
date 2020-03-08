@@ -1,6 +1,7 @@
 from flask import Flask, request
 import requests
-from py_zipkin.zipkin import zipkin_span, create_http_headers_for_new_span, ZipkinAttrs
+from py_zipkin.zipkin import zipkin_span, create_http_headers_for_new_span, ZipkinAttrs, Kind
+from py_zipkin.encoding import Encoding
 
 
 app = Flask(__name__)
@@ -9,10 +10,19 @@ app = Flask(__name__)
 def default_handler(encoded_span):
     body = encoded_span
 
+    # decoded = _V1ThriftDecoder.decode_spans(encoded_span)
+    app.logger.debug("body %s", body)
+
+    # return requests.post(
+    #     "http://zipkin:9411/api/v1/spans",
+    #     data=body,
+    #     headers={'Content-Type': 'application/x-thrift'},
+    # )
+
     return requests.post(
-        "http://zipkin:9411/api/v1/spans",
+        "http://zipkin:9411/api/v2/spans",
         data=body,
-        headers={'Content-Type': 'application/x-thrift'},
+        headers={'Content-Type': 'application/json'},
     )
 
 
@@ -29,6 +39,13 @@ def call_api_02():
     return 'OK'
 
 
+@zipkin_span(service_name='api_01', span_name='call_api_03_FROM_01')
+def call_api_03():
+    headers = create_http_headers_for_new_span()
+    requests.get('http://api_03:5000/', headers=headers)
+    return 'OK'
+
+
 @app.route('/')
 def index():
     with zipkin_span(
@@ -37,8 +54,11 @@ def index():
         transport_handler=default_handler,
         port=5000,
         sample_rate=100,
+        kind=Kind.SERVER,
+        encoding=Encoding.V2_JSON
     ):
         call_api_02()
+        call_api_03()
     return 'OK', 200
 
 

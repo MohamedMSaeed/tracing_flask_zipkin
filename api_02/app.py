@@ -1,6 +1,7 @@
 from flask import Flask, request
 import requests
-from py_zipkin.zipkin import zipkin_span, create_http_headers_for_new_span, ZipkinAttrs, Kind
+from py_zipkin.zipkin import zipkin_span, create_http_headers_for_new_span, ZipkinAttrs, Kind, zipkin_client_span
+from py_zipkin.request_helpers import create_http_headers
 from py_zipkin.encoding import Encoding
 import time
 
@@ -23,15 +24,16 @@ def default_handler(encoded_span):
         headers={'Content-Type': 'application/json'},
     )
 
+
 @app.before_request
 def log_request_info():
     app.logger.debug('Headers: %s', request.headers)
     app.logger.debug('Body: %s', request.get_data())
 
 
-@zipkin_span(service_name='api_02', span_name='call_api_03')
+@zipkin_client_span(service_name='api_02', span_name='call_api_03')
 def call_api_03():
-    headers = create_http_headers_for_new_span()
+    headers = create_http_headers()
     requests.get('http://api_03:5000/', headers=headers)
     return 'OK'
 

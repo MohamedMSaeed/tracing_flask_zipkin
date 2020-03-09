@@ -1,6 +1,6 @@
 from flask import Flask, request
 import requests
-from py_zipkin.zipkin import zipkin_span, create_http_headers_for_new_span, ZipkinAttrs, Kind
+from py_zipkin.zipkin import zipkin_span, create_http_headers_for_new_span, ZipkinAttrs, Kind, zipkin_client_span
 from py_zipkin.encoding import Encoding
 import time
 
@@ -30,7 +30,7 @@ def log_request_info():
     app.logger.debug('Body: %s', request.get_data())
 
 
-@zipkin_span(service_name='api_03', span_name='sleep_api_03')
+@zipkin_client_span(service_name='api_03', span_name='sleep_api_03')
 def sleep():
     time.sleep(2)
     return 'OK'

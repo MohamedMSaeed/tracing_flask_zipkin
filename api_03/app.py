@@ -51,7 +51,7 @@ def index():
         transport_handler=default_handler,
         port=5000,
         sample_rate=100,
-        kind=Kind.CLIENT,
+        # kind=Kind.CLIENT,
         encoding=Encoding.V2_JSON
     ):
         sleep()

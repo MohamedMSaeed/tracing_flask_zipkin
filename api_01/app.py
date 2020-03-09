@@ -54,11 +54,11 @@ def index():
         transport_handler=default_handler,
         port=5000,
         sample_rate=100,
-        kind=Kind.SERVER,
+        # kind=Kind.SERVER,
         encoding=Encoding.V2_JSON
     ):
         call_api_02()
-        call_api_03()
+        # call_api_03()
     return 'OK', 200
 
 

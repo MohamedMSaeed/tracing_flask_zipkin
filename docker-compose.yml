@@ -38,3 +38,75 @@ services:
       - 'ZIPKIN_DSN=http://zipkin:9411/api/v1/spans'
     volumes:
       - './api_03:/app'
+
+  api_04:
+    build:
+      context: api_04
+    container_name: api_04
+    environment:
+      - 'ZIPKIN_DSN=http://zipkin:9411/api/v1/spans'
+    volumes:
+      - './api_04:/app'
+
+  api_05:
+    build:
+      context: api_05
+    container_name: api_05
+    environment:
+      - 'ZIPKIN_DSN=http://zipkin:9411/api/v1/spans'
+    volumes:
+      - './api_05:/app'
+
+  api_06:
+    build:
+      context: api_06
+    container_name: api_06
+    environment:
+      - 'ZIPKIN_DSN=http://zipkin:9411/api/v1/spans'
+    volumes:
+      - './api_06:/app'
+
+  api_07:
+    build:
+      context: api_07
+    container_name: api_07
+    environment:
+      - 'ZIPKIN_DSN=http://zipkin:9411/api/v1/spans'
+    volumes:
+      - './api_07:/app'
+
+  api_08:
+    build:
+      context: api_08
+    container_name: api_08
+    environment:
+      - 'ZIPKIN_DSN=http://zipkin:9411/api/v1/spans'
+    volumes:
+      - './api_08:/app'
+
+  api_10:
+    build:
+      context: api_10
+    container_name: api_10
+    environment:
+      - 'ZIPKIN_DSN=http://zipkin:9411/api/v1/spans'
+    volumes:
+      - './api_10:/app'
+
+  mysql_10:
+    image: mysql:5.7
+    container_name: mysql_10
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'db'
+      MYSQL_USER: 'test'
+      MYSQL_PASSWORD: 'test'
+      MYSQL_ROOT_PASSWORD: 'test'
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - mysql_10:/var/lib/mysql
+    environment:
+      - 'ZIPKIN_DSN=http://zipkin:9411/api/v1/spans'

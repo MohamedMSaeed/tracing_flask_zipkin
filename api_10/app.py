@@ -1,8 +1,9 @@
 from flask import Flask, request
 import requests
 from py_zipkin.zipkin import zipkin_span, create_http_headers_for_new_span, ZipkinAttrs, Kind, zipkin_client_span
+from py_zipkin.request_helpers import create_http_headers
 from py_zipkin.encoding import Encoding
-import time, os
+import sys, os
 
 
 app = Flask(__name__)
@@ -29,39 +30,15 @@ def log_request_info():
     app.logger.debug('Headers: %s', request.headers)
     app.logger.debug('Body: %s', request.get_data())
 
-
-@zipkin_client_span(service_name='api_03', span_name='sleep_api_03')
-def sleep():
-    time.sleep(2)
-    return 'OK'
-
-@zipkin_client_span(service_name='api_03', span_name='write_to_file_api3')
-def write_to_file():
-    # This function writes to file
-    f = open("Justfile3.txt", "a")
-    for x in range(0, 100):
-        f.write("Now the file has more content!")
-    f.close()
-    return 'OK'
-
-@zipkin_client_span(service_name='api_03', span_name='read_from_file_api3')
-def read_from_file():
-    # This file reads from file
-    f = open("JustfileNotFound.txt", "r")
-    app.logger.info(f.read())
-    os.remove("Justfile3.txt")
-    return 'OK'
-
-@zipkin_client_span(service_name='api_03', span_name='call_api_05_from_api03')
-def call_api_05():
-    headers = create_http_headers()
-    requests.get('http://api_05:5000/', headers=headers)
+@zipkin_client_span(service_name='api_10', span_name='just_message_api10')
+def just_message_08():
+    app.logger.info("Just message from API 10")
     return 'OK'
 
 @app.route('/')
 def index():
     with zipkin_span(
-        service_name='api_03',
+        service_name='api_10',
         zipkin_attrs=ZipkinAttrs(
             trace_id=request.headers['X-B3-TraceID'],
             span_id=request.headers['X-B3-SpanID'],
@@ -69,17 +46,15 @@ def index():
             flags=request.headers['X-B3-Flags'],
             is_sampled=request.headers['X-B3-Sampled'],
         ),
-        span_name='index_api_03',
+        span_name='index_api_10',
         transport_handler=default_handler,
         port=5000,
         sample_rate=100,
         encoding=Encoding.V2_JSON
     ):
-        # sleep()
-          write_to_file()
-          read_from_file()
-          call_api_05()
-          
+        just_message_08()
+        call_api_09()
+
     return 'OK', 200
 
 

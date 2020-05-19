@@ -98,15 +98,17 @@ services:
     container_name: mysql_10
     restart: always
     environment:
-      MYSQL_DATABASE: 'db'
-      MYSQL_USER: 'test'
-      MYSQL_PASSWORD: 'test'
-      MYSQL_ROOT_PASSWORD: 'test'
+      MYSQL_DATABASE: 'mysql_10'
+      MYSQL_USER: 'mysql_10'
+      MYSQL_PASSWORD: 'mysql_10'
+      MYSQL_ROOT_PASSWORD: 'mysql_10'
     ports:
       - '3306:3306'
     expose:
       - '3306'
     volumes:
       - mysql_10:/var/lib/mysql
-    environment:
-      - 'ZIPKIN_DSN=http://zipkin:9411/api/v1/spans'
+    depends_on:
+      - api_10
+volumes:
+  mysql_10:

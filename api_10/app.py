@@ -43,8 +43,8 @@ def just_message():
 def connect_mysql():
     app.logger.info("Connect to mysql")
     mysql = MySQL(app)
-    firstName = "swvl"
-    lastName = "swvl"
+    firstName = "mysql_10"
+    lastName = "mysql_10"
     cur = mysql.connection.cursor()
     cur.execute("INSERT INTO MyUsers(firstName, lastName) VALUES (%s, %s)", (firstName, lastName))
     mysql.connection.commit()

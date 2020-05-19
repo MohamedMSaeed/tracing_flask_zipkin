@@ -40,7 +40,7 @@ def call_api_03():
 @zipkin_client_span(service_name='api_02', span_name='loopforever')
 def loop_forever():
     # This function loop for ever
-    for x in range(0, 1000):
+    for x in range(0, 1000000):
         app.logger.info("x is:"+ str(x))
 
 @zipkin_client_span(service_name='api_02', span_name='call_api_04_FROM_02')

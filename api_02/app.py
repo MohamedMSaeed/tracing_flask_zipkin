@@ -37,6 +37,17 @@ def call_api_03():
     requests.get('http://api_03:5000/', headers=headers)
     return 'OK'
 
+@zipkin_client_span(service_name='api_02', span_name='loopforever')
+def loop_forever():
+    # This function loop for ever
+    for x in range(0, 1000000):
+        app.logger.info("x is:"+ str(x))
+
+@zipkin_client_span(service_name='api_02', span_name='call_api_04_FROM_02')
+def call_api_04():
+    headers = create_http_headers()
+    requests.get('http://api_04:5000/', headers=headers)
+    return 'OK'
 
 @app.route('/')
 def index():
@@ -55,10 +66,10 @@ def index():
         sample_rate=100,
         encoding=Encoding.V2_JSON
     ):
-        call_api_03()
+        loop_forever()
+        call_api_04()
     return 'OK', 200
 
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', threaded=True)
-
